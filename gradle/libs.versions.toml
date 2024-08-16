@@ -1,0 +1,6 @@
+[versions]
+java = "21"
+snakeyaml = "2.2"
+
+[libraries]
+snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
