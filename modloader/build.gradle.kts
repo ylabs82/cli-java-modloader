@@ -45,6 +45,6 @@ tasks {
     }
 
     build {
-        dependsOn("standaloneJar")
+        dependsOn(standaloneJar)
     }
 }
