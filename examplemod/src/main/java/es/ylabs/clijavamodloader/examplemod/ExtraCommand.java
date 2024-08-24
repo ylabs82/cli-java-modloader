@@ -26,10 +26,9 @@ package es.ylabs.clijavamodloader.examplemod;
 
 import es.ylabs.clijavamodloader.annotations.Command;
 import es.ylabs.clijavamodloader.annotations.CommandGroup;
-import es.ylabs.clijavamodloader.commandgroups.AbstractCommandGroup;
 
 @CommandGroup
-public class ExtraCommand extends AbstractCommandGroup {
+public class ExtraCommand {
 
     @Command(name = "extra")
     public void extra(String[] args) {

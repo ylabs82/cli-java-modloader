@@ -26,10 +26,9 @@ package es.ylabs.clijavamodloader.examplemod;
 
 import es.ylabs.clijavamodloader.annotations.Command;
 import es.ylabs.clijavamodloader.annotations.CommandGroup;
-import es.ylabs.clijavamodloader.commandgroups.AbstractCommandGroup;
 
 @CommandGroup
-public class StatusCommand extends AbstractCommandGroup {
+public class StatusCommand {
 
     @Command(name = "status")
     public void status(String[] args) {

@@ -24,12 +24,13 @@
 
 package es.ylabs.clijavamodloader.modloader;
 
+import es.ylabs.clijavamodloader.annotations.Command;
 import es.ylabs.clijavamodloader.annotations.CommandGroup;
-import es.ylabs.clijavamodloader.commandgroups.AbstractCommandGroup;
 import es.ylabs.clijavamodloader.commands.management.CommandCollection;
 
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.CodeSource;
@@ -42,6 +43,10 @@ import org.yaml.snakeyaml.Yaml;
 
 public enum LoaderCore {
     INSTANCE;
+
+    private final static String ANSI_RESET = "\u001B[0m";
+    private final static String ANSI_BOLD = "\u001B[1m";
+    private final static String ANSI_RED = "\u001B[31m";
 
     private final CommandCollection commandCollection;
     private final Map<String, ArrayList<String>> loadedModulesWithCommands;
@@ -169,10 +174,9 @@ public enum LoaderCore {
                             Class<?> groupClass = classLoader.loadClass(className);
 
                             if (groupClass.isAnnotationPresent(CommandGroup.class)) {
-                                AbstractCommandGroup groupInstance = (AbstractCommandGroup)
-                                        groupClass.getDeclaredConstructor().newInstance();
+                                Object groupInstance = groupClass.getDeclaredConstructor().newInstance();
                                 Map<String, Consumer<String[]>> newCommands =
-                                        groupInstance.getCommands();
+                                        getCommandsFromGroup(groupClass, groupInstance);
 
                                 try {
                                     commandCollection.addCommands(newCommands);
@@ -238,5 +242,31 @@ public enum LoaderCore {
 
     private boolean mapContainsKey(final Map<?, ?> map, String key) {
         return !mapIsNullOrEmpty(map) && map.containsKey(key);
+    }
+
+    private static Map<String, Consumer<String[]>> getCommandsFromGroup(Class<?> groupClass,
+                                                                        Object groupInstance) {
+        Map<String, Consumer<String[]>> toret = new HashMap<>();
+
+        for (Method method : groupClass.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(Command.class)) {
+                Command command = method.getAnnotation(Command.class);
+
+                toret.put(command.name(), consumer -> {
+                    try {
+                        method.invoke(groupInstance, (Object) consumer);
+                    } catch (Exception e) {
+                        printRedAndBold("Error executing command " + command.name());
+                        System.out.println();
+                    }
+                });
+            }
+        }
+
+        return toret;
+    }
+
+    private static void printRedAndBold(String message) {
+        System.out.println(ANSI_BOLD + ANSI_RED + message + ANSI_RESET);
     }
 }

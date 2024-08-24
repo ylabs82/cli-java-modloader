@@ -26,11 +26,10 @@ package es.ylabs.clijavamodloader.commands.coregroups;
 
 import es.ylabs.clijavamodloader.annotations.Command;
 import es.ylabs.clijavamodloader.annotations.CommandGroup;
-import es.ylabs.clijavamodloader.commandgroups.AbstractCommandGroup;
 import es.ylabs.clijavamodloader.helpers.ANSIHelpers;
 
 @CommandGroup
-public class HelpersGroup extends AbstractCommandGroup {
+public class HelpersGroup {
 
     private final String COMMAND_CLEAR = "clear";
     private final String COMMAND_EXIT = "exit";

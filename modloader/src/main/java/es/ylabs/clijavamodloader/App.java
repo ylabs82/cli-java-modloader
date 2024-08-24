@@ -30,14 +30,28 @@ import es.ylabs.clijavamodloader.helpers.ANSIHelpers;
 import es.ylabs.clijavamodloader.helpers.ReadString;
 import es.ylabs.clijavamodloader.modloader.LoaderCommands;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
+
 public class App {
     public static void main(String[] args) {
         CommandCollection commandCollection = CommandCollection.INSTANCE.getInstance();
         ReadString readString = new ReadString("$ ");
 
         try {
-            commandCollection.addCommands(new HelpersGroup().getCommands());
-            commandCollection.addCommands(new LoaderCommands().getCommands());
+            HelpersGroup helpersGroup = new HelpersGroup();
+            LoaderCommands loaderGroup = new LoaderCommands();
+
+            Map<String, Consumer<String[]>> newCommands = new HashMap<>();
+
+            newCommands.put("clear", helpersGroup::clear);
+            newCommands.put("exit", helpersGroup::exit);
+            newCommands.put("lsmod", loaderGroup::lsmod);
+            newCommands.put("modprobe", loaderGroup::modprobe);
+            newCommands.put("rmmod", loaderGroup::rmmod);
+
+            commandCollection.addCommands(newCommands);
         } catch (Exception e) {
             ANSIHelpers.printRedAndBold(e.getMessage());
             System.exit(-1);

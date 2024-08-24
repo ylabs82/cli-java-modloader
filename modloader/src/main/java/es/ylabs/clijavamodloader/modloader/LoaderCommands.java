@@ -26,13 +26,12 @@ package es.ylabs.clijavamodloader.modloader;
 
 import es.ylabs.clijavamodloader.annotations.Command;
 import es.ylabs.clijavamodloader.annotations.CommandGroup;
-import es.ylabs.clijavamodloader.commandgroups.AbstractCommandGroup;
 import es.ylabs.clijavamodloader.helpers.ANSIHelpers;
 
 import java.util.List;
 
 @CommandGroup
-public class LoaderCommands extends AbstractCommandGroup {
+public class LoaderCommands {
 
     private final String COMMAND_LISTMODS = "lsmod";
     private final String COMMAND_LOADMOD = "modprobe";
@@ -45,7 +44,7 @@ public class LoaderCommands extends AbstractCommandGroup {
     }
 
     @Command(name = COMMAND_LISTMODS)
-    public void listMods(String[] args) {
+    public void lsmod(String[] args) {
         if (args.length == 1) {
             List<String> loadedModules = loaderCore.getLoadedModules();
 
@@ -60,7 +59,7 @@ public class LoaderCommands extends AbstractCommandGroup {
     }
 
     @Command(name = COMMAND_LOADMOD)
-    public void load(String[] args) {
+    public void modprobe(String[] args) {
         if (args.length == 2) {
             try {
                 if (loaderCore.loadModule(args[1])) {
@@ -77,7 +76,7 @@ public class LoaderCommands extends AbstractCommandGroup {
     }
 
     @Command(name = COMMAND_UNLOADMOD)
-    public void unload(String[] args) {
+    public void rmmod(String[] args) {
         if (args.length == 2) {
             if (loaderCore.unloadModule(args[1])) {
                 ANSIHelpers.printYellowAndBold("Module " + args[1] + " unloaded");
