@@ -24,13 +24,13 @@
 
 package es.ylabs.clijavamodloader.examplemod;
 
-import es.ylabs.clijavamodloader.annotations.Command;
-import es.ylabs.clijavamodloader.annotations.CommandGroup;
+import es.ylabs.clijavamodloader.annotations.CliCommand;
+import es.ylabs.clijavamodloader.annotations.CliCommandGroup;
 
-@CommandGroup
+@CliCommandGroup
 public class ExtraCommand {
 
-    @Command(name = "extra")
+    @CliCommand(command = "extra")
     public void extra(String[] args) {
         System.out.println("extra");
     }

@@ -24,22 +24,22 @@
 
 package es.ylabs.clijavamodloader.commands.coregroups;
 
-import es.ylabs.clijavamodloader.annotations.Command;
-import es.ylabs.clijavamodloader.annotations.CommandGroup;
+import es.ylabs.clijavamodloader.annotations.CliCommand;
+import es.ylabs.clijavamodloader.annotations.CliCommandGroup;
 import es.ylabs.clijavamodloader.helpers.ANSIHelpers;
 
-@CommandGroup
+@CliCommandGroup
 public class HelpersGroup {
 
     private final String COMMAND_CLEAR = "clear";
     private final String COMMAND_EXIT = "exit";
 
-    @Command(name = COMMAND_CLEAR)
+    @CliCommand(command = COMMAND_CLEAR)
     public void clear(String[] args) {
         System.out.print(ANSIHelpers.ANSI_CLEAR);
     }
 
-    @Command(name = COMMAND_EXIT)
+    @CliCommand(command = COMMAND_EXIT)
     public void exit(String[] args) {
         ANSIHelpers.printGreenAndBold("Exiting...");
         System.exit(0);

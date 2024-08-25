@@ -24,13 +24,13 @@
 
 package es.ylabs.clijavamodloader.examplemod;
 
-import es.ylabs.clijavamodloader.annotations.Command;
-import es.ylabs.clijavamodloader.annotations.CommandGroup;
+import es.ylabs.clijavamodloader.annotations.CliCommand;
+import es.ylabs.clijavamodloader.annotations.CliCommandGroup;
 
-@CommandGroup
+@CliCommandGroup
 public class StatusCommand {
 
-    @Command(name = "status")
+    @CliCommand(command = "status")
     public void status(String[] args) {
         System.out.println("status");
     }

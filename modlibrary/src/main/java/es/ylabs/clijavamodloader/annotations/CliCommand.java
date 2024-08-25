@@ -30,6 +30,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface CommandGroup {
+@Target(ElementType.METHOD)
+public @interface CliCommand {
+    String command();
 }

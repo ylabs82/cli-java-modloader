@@ -24,8 +24,8 @@
 
 package es.ylabs.clijavamodloader.modloader;
 
-import es.ylabs.clijavamodloader.annotations.Command;
-import es.ylabs.clijavamodloader.annotations.CommandGroup;
+import es.ylabs.clijavamodloader.annotations.CliCommand;
+import es.ylabs.clijavamodloader.annotations.CliCommandGroup;
 import es.ylabs.clijavamodloader.commands.management.CommandCollection;
 
 import java.io.File;
@@ -173,7 +173,7 @@ public enum LoaderCore {
                                 this.getClass().getClassLoader())) {
                             Class<?> groupClass = classLoader.loadClass(className);
 
-                            if (groupClass.isAnnotationPresent(CommandGroup.class)) {
+                            if (groupClass.isAnnotationPresent(CliCommandGroup.class)) {
                                 Object groupInstance = groupClass.getDeclaredConstructor().newInstance();
                                 Map<String, Consumer<String[]>> newCommands =
                                         getCommandsFromGroup(groupClass, groupInstance);
@@ -249,14 +249,14 @@ public enum LoaderCore {
         Map<String, Consumer<String[]>> toret = new HashMap<>();
 
         for (Method method : groupClass.getDeclaredMethods()) {
-            if (method.isAnnotationPresent(Command.class)) {
-                Command command = method.getAnnotation(Command.class);
+            if (method.isAnnotationPresent(CliCommand.class)) {
+                CliCommand cliCommand = method.getAnnotation(CliCommand.class);
 
-                toret.put(command.name(), consumer -> {
+                toret.put(cliCommand.command(), consumer -> {
                     try {
                         method.invoke(groupInstance, (Object) consumer);
                     } catch (Exception e) {
-                        printRedAndBold("Error executing command " + command.name());
+                        printRedAndBold("Error executing command " + cliCommand.command());
                         System.out.println();
                     }
                 });

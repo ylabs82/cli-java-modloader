@@ -24,13 +24,13 @@
 
 package es.ylabs.clijavamodloader.modloader;
 
-import es.ylabs.clijavamodloader.annotations.Command;
-import es.ylabs.clijavamodloader.annotations.CommandGroup;
+import es.ylabs.clijavamodloader.annotations.CliCommand;
+import es.ylabs.clijavamodloader.annotations.CliCommandGroup;
 import es.ylabs.clijavamodloader.helpers.ANSIHelpers;
 
 import java.util.List;
 
-@CommandGroup
+@CliCommandGroup
 public class LoaderCommands {
 
     private final String COMMAND_LISTMODS = "lsmod";
@@ -43,7 +43,7 @@ public class LoaderCommands {
         loaderCore = LoaderCore.INSTANCE.getInstance();
     }
 
-    @Command(name = COMMAND_LISTMODS)
+    @CliCommand(command = COMMAND_LISTMODS)
     public void lsmod(String[] args) {
         if (args.length == 1) {
             List<String> loadedModules = loaderCore.getLoadedModules();
@@ -58,7 +58,7 @@ public class LoaderCommands {
         }
     }
 
-    @Command(name = COMMAND_LOADMOD)
+    @CliCommand(command = COMMAND_LOADMOD)
     public void modprobe(String[] args) {
         if (args.length == 2) {
             try {
@@ -75,7 +75,7 @@ public class LoaderCommands {
         }
     }
 
-    @Command(name = COMMAND_UNLOADMOD)
+    @CliCommand(command = COMMAND_UNLOADMOD)
     public void rmmod(String[] args) {
         if (args.length == 2) {
             if (loaderCore.unloadModule(args[1])) {
