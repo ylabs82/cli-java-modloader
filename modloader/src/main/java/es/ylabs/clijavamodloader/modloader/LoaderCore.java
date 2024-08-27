@@ -45,10 +45,6 @@ import org.yaml.snakeyaml.Yaml;
 public enum LoaderCore {
     INSTANCE;
 
-    private final static String ANSI_RESET = "\u001B[0m";
-    private final static String ANSI_BOLD = "\u001B[1m";
-    private final static String ANSI_RED = "\u001B[31m";
-
     private final CommandCollection commandCollection;
     private final Map<String, ArrayList<String>> loadedModulesWithCommands;
     private final String pluginsHomePath;
