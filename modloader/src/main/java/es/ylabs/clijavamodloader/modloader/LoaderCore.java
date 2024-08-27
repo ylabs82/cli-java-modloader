@@ -27,6 +27,7 @@ package es.ylabs.clijavamodloader.modloader;
 import es.ylabs.clijavamodloader.annotations.CliCommand;
 import es.ylabs.clijavamodloader.annotations.CliCommandGroup;
 import es.ylabs.clijavamodloader.commands.management.CommandCollection;
+import es.ylabs.clijavamodloader.helpers.ANSIHelpers;
 
 import java.io.File;
 import java.io.InputStream;
@@ -256,7 +257,7 @@ public enum LoaderCore {
                     try {
                         method.invoke(groupInstance, (Object) consumer);
                     } catch (Exception e) {
-                        printRedAndBold("Error executing command " + cliCommand.command());
+                        ANSIHelpers.printRedAndBold("Error executing command " + cliCommand.command());
                         System.out.println();
                     }
                 });
@@ -264,9 +265,5 @@ public enum LoaderCore {
         }
 
         return toret;
-    }
-
-    private static void printRedAndBold(String message) {
-        System.out.println(ANSI_BOLD + ANSI_RED + message + ANSI_RESET);
     }
 }
