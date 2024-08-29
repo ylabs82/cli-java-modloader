@@ -29,6 +29,7 @@ import es.ylabs.clijavamodloader.annotations.CliCommandGroup;
 import es.ylabs.clijavamodloader.helpers.ANSIHelpers;
 
 import java.util.List;
+import java.util.Objects;
 
 @CliCommandGroup
 public class LoaderCommands {
@@ -67,8 +68,10 @@ public class LoaderCommands {
                 } else {
                     ANSIHelpers.printRedAndBold("Module not found");
                 }
-            } catch (Exception e) {
-                ANSIHelpers.printRedAndBold(e.getMessage());
+            } catch (Error | Exception e) {
+                ANSIHelpers.printRedAndBold("Error loading module " + args[1]);
+                ANSIHelpers.printRedAndBold(Objects.requireNonNullElse(e.getMessage(),
+                        "UNKNOWN ERROR"));
             }
         } else {
             ANSIHelpers.printRedAndBold("Invalid arguments");

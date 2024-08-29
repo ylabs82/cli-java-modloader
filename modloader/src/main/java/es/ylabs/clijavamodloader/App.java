@@ -32,6 +32,7 @@ import es.ylabs.clijavamodloader.modloader.LoaderCommands;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class App {
@@ -53,7 +54,8 @@ public class App {
 
             commandCollection.addCommands(newCommands);
         } catch (Exception e) {
-            ANSIHelpers.printRedAndBold(e.getMessage());
+            ANSIHelpers.printRedAndBold(Objects.requireNonNullElse(e.getMessage(),
+                    "UNKNOWN ERROR"));
             System.exit(-1);
         }
 
@@ -64,7 +66,8 @@ public class App {
                 try {
                     commandCollection.executeCommand(command);
                 } catch (Exception e) {
-                    ANSIHelpers.printRedAndBold(e.getMessage());
+                    ANSIHelpers.printRedAndBold(Objects.requireNonNullElse(e.getMessage(),
+                            "UNKNOWN ERROR"));
                 }
             }
         }

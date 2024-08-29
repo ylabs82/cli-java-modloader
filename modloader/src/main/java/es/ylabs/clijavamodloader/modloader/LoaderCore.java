@@ -126,7 +126,7 @@ public enum LoaderCore {
      * @throws Exception If the module is already loaded or an error occurs while
      *      loading the module.
      */
-    public boolean loadModule(String module) throws Exception {
+    public boolean loadModule(String module) throws Error, Exception {
         if (module.contains("/")) {
             String base = module.substring(0, module.lastIndexOf('/'));
             String file = module.substring(module.lastIndexOf('/') + 1);
@@ -146,9 +146,11 @@ public enum LoaderCore {
      * @throws Exception If the module is already loaded or an error occurs while
      *      loading the module.
      */
-    public boolean loadModule(String pluginPath, String module) throws Exception {
+    public boolean loadModule(String pluginPath, String module) throws Error, Exception {
         if (mapContainsKey(loadedModulesWithCommands, module)) {
             throw new Exception("Module already loaded");
+        } else {
+            loadedModulesWithCommands.put(module, new ArrayList<>());
         }
 
         File file = new File(pluginPath, module);
@@ -174,40 +176,23 @@ public enum LoaderCore {
                                 Object groupInstance = groupClass.getDeclaredConstructor().newInstance();
                                 Map<String, Consumer<String[]>> newCommands =
                                         getCommandsFromGroup(groupClass, groupInstance);
-
-                                try {
-                                    commandCollection.addCommands(newCommands);
-
-                                    if (!mapContainsKey(loadedModulesWithCommands, module)) {
-                                        loadedModulesWithCommands.put(module,
-                                                new ArrayList<>(newCommands.keySet()));
-                                    } else {
-                                        loadedModulesWithCommands.get(module)
-                                                .addAll(newCommands.keySet());
-                                    }
-                                } catch (Exception e) {
-                                    if (mapContainsKey(loadedModulesWithCommands, module)) {
-                                        unloadModule(module);
-                                    }
-
-                                    throw new Exception(e.getMessage());
-                                }
+                                commandCollection.addCommands(newCommands);
+                                loadedModulesWithCommands.get(module).addAll(newCommands.keySet());
                             }
-                        } catch (Exception e) {
-                            throw new Exception(e.getMessage());
+                        } catch (Error | Exception e) {
+                            throw e;
                         }
                     }
                 }
 
-                if (mapContainsKey(loadedModulesWithCommands, module)) {
+                if (!loadedModulesWithCommands.get(module).isEmpty()) {
                     return true;
                 } else {
-                    throw new Exception("Unknown error");
+                    throw new Exception("No commands found in module");
                 }
-            } catch (Exception e) {
-                throw new Exception("Error loading module " + module
-                        + System.lineSeparator()
-                        + e.getMessage());
+            } catch (Error | Exception e) {
+                unloadModule(module);
+                throw e;
             }
         } else {
             return false;
@@ -252,9 +237,8 @@ public enum LoaderCore {
                 toret.put(cliCommand.command(), consumer -> {
                     try {
                         method.invoke(groupInstance, (Object) consumer);
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                         ANSIHelpers.printRedAndBold("Error executing command " + cliCommand.command());
-                        System.out.println();
                     }
                 });
             }
